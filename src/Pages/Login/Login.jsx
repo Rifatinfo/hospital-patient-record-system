@@ -1,16 +1,41 @@
+import { useContext } from "react";
+import { AuthContext } from "../../Provider/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
 
-
-    const handleSubmit = e => {
+    const {createUser,
+        signInWithGoogle,} = useContext(AuthContext);
+        const navigate = useNavigate();
+    const handleSubmit = async e => {
         e.preventDefault();
         const form = e.target;
         const email = form.email.value;
         const password = form.password.value;
         console.log(email, password);
-
+        createUser(email, password)
+        .then(result => {
+            console.log(result.user);
+            alert("Successfully Login");
+            navigate('/all-patient')
+        })
+        .catch(err => {
+            console.log((err.message));
+            alert("Error occ")
+        })
         form.reset();
     }
+
+    const handleGoogleSignIn = async () => {
+        try {
+          await signInWithGoogle()
+    
+          // toast.success('Signin Successful')
+        } catch (err) {
+          console.log(err)
+          // toast.error(err?.message)
+        }
+      }
 
     return (
         <div className="">
@@ -36,7 +61,7 @@ const Login = () => {
                         {/* <!-- login details  --> */}
                         <form onSubmit={handleSubmit} className="ml-16 flex lg:mr-16 lg:flex justify-center items-center h-[380px]">
                             <div className="space-y-2">
-                                <div className="md:mr-0 mr-6">
+                                <div onClick={handleGoogleSignIn} className="md:mr-0 mr-6">
                                     <button aria-label="Login with Google" type="button" className="mx-auto mb-4 flex items-center justify-center  p-2 space-x-3.5 border-2 rounded-md focus:ring-2 focus:ring-offset-1 ">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" className="w-5 h-5 fill-current">
                                             <path d="M16.318 13.714v5.484h9.078c-0.37 2.354-2.745 6.901-9.078 6.901-5.458 0-9.917-4.521-9.917-10.099s4.458-10.099 9.917-10.099c3.109 0 5.193 1.318 6.38 2.464l4.339-4.182c-2.786-2.599-6.396-4.182-10.719-4.182-8.844 0-16 7.151-16 16s7.156 16 16 16c9.234 0 15.365-6.49 15.365-15.635 0-1.052-0.115-1.854-0.255-2.651z"></path>

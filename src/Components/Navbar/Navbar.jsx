@@ -1,18 +1,18 @@
 /* eslint-disable no-unused-vars */
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { BiX } from "react-icons/bi";
 import { IoMenu } from "react-icons/io5";
 import logo from '../../assets/icons8-hospital-51.png'
+import { AuthContext } from "../../Provider/AuthProvider";
 const Navbar = () => {
     const [open, setOpen] = useState(false);
-    // const [active, setActive] = useState('Home');
-
+    const { user } = useContext(AuthContext)
     const menuItems = [
         { name: "Home", link: "/" },
         { name: "Add Patient", link: "/add-patient" },
         { name: "All Patient", link: "/all-patient" }
     ];
-    
+
     const handleNavClick = (item) => {
         setOpen(false);
     }
@@ -41,8 +41,21 @@ const Navbar = () => {
 
                     {/* button  */}
                     <div className="hidden md:flex items-center gap-3 font-semibold text-lg">
-                        <button className="btn px-8 rounded-3xl py-2 border-2 shadow-none bg-orange-600 text-white border-orange-600">Sign In</button>
-                        <button className="btn px-8 rounded-3xl py-2 border-2 shadow-none bg-orange-600 text-white border-orange-600">Register</button>
+                        {/* <button className="btn px-8 rounded-3xl py-2 border-2 shadow-none bg-orange-600 text-white border-orange-600">Sign In</button>
+                        <button className="btn px-8 rounded-3xl py-2 border-2 shadow-none bg-orange-600 text-white border-orange-600">Register</button> */}
+                        {user && user.photoURL ? (
+                            <div className="w-10 h-10 rounded-full overflow-hidden">
+                                <img src={user.photoURL} alt="User Profile" className="w-full h-full object-cover" />
+                            </div>
+                        ) : (
+                            <div className="avatar">
+                                <div className="w-10 rounded-full">
+                                    <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                                </div>
+                            </div>
+                        )}
+
+
                     </div>
 
                     {/* mobile Menu Toggle Button  */}
